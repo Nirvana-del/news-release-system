@@ -1,4 +1,17 @@
 $color:#F0F2F5;
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  position: absolute;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #1890ff
+}
+
+::-webkit-scrollbar-track {
+  background-color: #ddd
+}
 body{
   background-color: $color;
   // 禁用文字选中
@@ -9,13 +22,58 @@ img{
   // 禁止拖动图片
   -webkit-user-drag: none;
 }
+// 侧边栏
+#side-menu {
+  overflow: auto;
+  height: 100vh;
+  box-sizing: border-box;
+  .app-title {
+    height: 32px;
+    margin: 16px;
+    color: #fff;
+    text-align: center;
+    line-height: 32px;
+    font-size: 20px;
+    .app-icon {
+      font-size: 20px;
+      color:#436abe
+    }
+  }
 
-#app-layout .logo {
-  height: 32px;
-  margin: 16px;
-  background: rgba(255, 255, 255, 0.3);
 }
 
-.site-layout .site-layout-background {
-  background: #fff;
+// 右侧 layout
+#app-layout {
+
+  // 顶部导航栏
+  .header-layout{
+    padding-left: 16px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    .profile{
+      .title{
+        color: #409EFF;
+        cursor: pointer;
+      }
+      .avatar{
+        margin-left: 10px;
+      }
+    }
+  }
+  // 中间内容区
+  .content-layout {
+    background: #fff;
+    margin: 16px 16px 0;
+    padding: 24px;
+    overflow: auto;
+    #bar-chart{
+      div:first-child{
+        width:100% !important;
+        canvas {
+          width:100%!important;
+        }
+      }
+    }
+  }
 }

@@ -20,8 +20,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "suppressImplicitAnyIndexErrors": true
   },
-  "include": ["src"],
+  "include": ["src","typed-css.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
