@@ -5,15 +5,18 @@ import AuthProvider from "@/components/Auth/AuthProvider";
 import {Provider} from "react-redux";
 import {persistor, store} from "@/redux";
 import {PersistGate} from "redux-persist/integration/react";
+import AuthRoute from "./components/Auth/AuthRoute";
 
-const App:React.FC = () => {
+const App: React.FC = () => {
     return (
         <div className="App">
             <BrowserRouter>
                 <Provider store={store}>
                     <PersistGate persistor={persistor}>
                         <AuthProvider>
-                            <AppRouter/>
+                            <AuthRoute>
+                                <AppRouter/>
+                            </AuthRoute>
                         </AuthProvider>
                     </PersistGate>
                 </Provider>

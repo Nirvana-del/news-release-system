@@ -140,7 +140,7 @@ const RightList: React.FC = () => {
         getRightList()
     }, [])
     return (
-        <div>
+        <div style={{height:'530px'}}>
             <ConfigProvider renderEmpty={EmptyState}>
                 <Table dataSource={dataSource} columns={columns}
                        pagination={{

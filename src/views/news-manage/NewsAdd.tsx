@@ -4,11 +4,12 @@ import NewsEdit from '@/components/news-manage/NewsEdit'
 import style from './NewsAdd.module.css'
 import { reqGetNewsCategories, reqAddNews } from '@/api/news'
 import { useNavigate } from 'react-router-dom';
-import {User} from "@/views/user-manage/types";
 import {News} from "@/views/news-manage/types";
 import {store} from "@/redux";
+import {useAuthContext} from "@/components/Auth/hooks/useAuthContext";
 
 const NewsAdd: React.FC = () => {
+    const { user } = useAuthContext()
     const navItems = ['新闻管理','撰写新闻']
     useEffect(() => {
         store.dispatch({
@@ -16,14 +17,7 @@ const NewsAdd: React.FC = () => {
             payload: navItems
         })
     }, []);
-    const userStr = localStorage.getItem('user')
-    let _user: Partial<User> = {
-        id: '',
-        username: '',
-        role: {pathList: []}
-    }
-    if (userStr) _user = JSON.parse(userStr)
-    const { region, username, roleId } = _user
+    const { region, username, roleId } = user
     const openNotification = (auditState:number) => {
         notification.info({
             message: `通知`,
@@ -54,6 +48,7 @@ const NewsAdd: React.FC = () => {
             // publishTime: 0
         } as News
         reqAddNews(newsObj).then((res:any) => {
+            console.log(res)
             if (res.code === 200){
                 if(auditState === 0) {
                     openNotification(0)

@@ -80,7 +80,7 @@ export const reqGetOfflineNewsList = () => {
 
 // 新闻详情
 export const reqGetNewsDetail = (id:string) => {
-    return request.get(`/news/${id}`)
+    return request.get(`/news/detail/${id}`)
 }
 
 // 获取用户最常浏览的新闻列表

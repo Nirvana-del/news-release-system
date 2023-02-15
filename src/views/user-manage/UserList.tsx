@@ -11,10 +11,12 @@ import {ColumnsType} from "antd/es/table";
 import UserForm from "@/views/user-manage/UserForm";
 import EmptyState from "@/components/antd/EmptyState";
 import {store} from "@/redux";
+import {useAuthContext} from "@/components/Auth/hooks/useAuthContext";
 
 const {confirm} = Modal;
 
 const UserList: React.FC = () => {
+    const { user } = useAuthContext()
     const navItems = ['用户管理','用户列表']
     useEffect(() => {
         store.dispatch({
@@ -22,15 +24,7 @@ const UserList: React.FC = () => {
             payload: navItems
         })
     }, []);
-    // token
-    const jsonStr = localStorage.getItem('user')
-    let currentUser: Partial<User> = {
-        id: '',
-        username: '',
-        role: {pathList: []}
-    }
-    if (jsonStr) currentUser = JSON.parse(jsonStr)
-    const {region, role} = currentUser
+    const {region, role} = user
     // state
     const [dataSource, setDataSource] = useState([])
     const [regionList, setRegionList] = useState<Region[]>([])
@@ -99,7 +93,7 @@ const UserList: React.FC = () => {
             render(item: User) {
                 const {roleState, userDefault} = item
                 return (
-                    <Switch checked={roleState} disabled={userDefault || item.id === currentUser.id}
+                    <Switch checked={roleState} disabled={userDefault || item.id === user.id}
                             onChange={() => changeUserState(item)}></Switch>
                 )
             }
@@ -111,12 +105,12 @@ const UserList: React.FC = () => {
                     <div>
                         <Button
                             danger
-                            disabled={item.userDefault || item.id === currentUser.id}
+                            disabled={item.userDefault || item.id === user.id}
                             onClick={() => handleDelete(item)}
                             icon={<DeleteOutlined/>}>删除</Button>&nbsp;
                         <Button
                             type="primary" icon={<EditOutlined/>}
-                            disabled={item.userDefault || item.id === currentUser.id}
+                            disabled={item.userDefault || item.id === user.id}
                             onClick={() => handleEdit(item)}>编辑</Button>
                     </div>
                 )
@@ -130,12 +124,12 @@ const UserList: React.FC = () => {
             // console.log('用户列表',res);
             const list = res.data.userList
             // 超级管理员展示全部
-            if (currentUser.roleId === RoleMap.SUPER_ADMIN) {
+            if (user.roleId === RoleMap.SUPER_ADMIN) {
                 setDataSource(list)
                 // 展示自己和自己管理区域下的编辑（ps:区域编辑没有用户管理权限）
             } else {
                 let sublist = list.filter((item: User) => {
-                    return item.id === currentUser.id || (item.region === region && item.roleId === RoleMap.EDITOR)
+                    return item.id === user.id || (item.region === region && item.roleId === RoleMap.EDITOR)
                 })
                 setDataSource(sublist)
             }

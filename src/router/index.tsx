@@ -9,66 +9,67 @@ import NewsList from "@/views/Tourist/newsList";
 import Login from "@/views/Login";
 import NotFound from "@/views/404/NotFound";
 import {useAuthContext} from "@/components/Auth/hooks/useAuthContext";
-import {getToken} from "@/utils/handleToken";
 import {routePath} from "@/components/Auth/types/auth-provider";
+import Cookie from "js-cookie";
 
 const whiteList = ['/login', '/news-list', '/news-detail']
-export default function AppRouter() {
-    const token = getToken()
-    const {routeList} = useAuthContext()
+let staticRoutes = [
+    {
+        path: '/login',
+        element: <Login/>
+    },
+    {
+        path: '/news-list',
+        element: <NewsList/>
+    },
+    {
+        path: '/news-detail/:id',
+        element: <NewsDetail/>
+    },
+    {
+        path: '/',
+        element: <Navigate to="/home"></Navigate>
+    },
+    {
+        path: '/404',
+        element: <NotFound/>
+    },
+    {
+        path: '*',
+        element: <Navigate to='/'></Navigate>
+    }
+]
 
+export default function AppRouter() {
+    const token = Cookie.get("token")
+    const {routeList} = useAuthContext()
+    console.log(routeList)
     NProgress.start()
     useEffect(() => {
         NProgress.done()
     })
-
-    let routeObj = {
-        path: '/',
-        element: <Layout/>,
-        children: [] as Partial<routePath>[]
-    }
-    const [dynamicRoute, setDynamicRoute] = useState<Partial<routePath>>(routeObj);
-    useEffect(() => {
-        routeObj.children = [...routeList]
-        setDynamicRoute(routeObj)
-    }, [routeList])
-    let staticRoutes = [
-        {
-            path: '/login',
-            element: <Login/>
-        },
-        {
-            path: '/news-list',
-            element: <NewsList/>
-        },
-        {
-            path: '/news-detail/:id',
-            element: <NewsDetail/>
-        },
+    let asyncRoutes = [
         {
             path: '/',
-            element: <Navigate to="/home"></Navigate>
-        },
-        {
-            path: '/404',
-            element: <NotFound/>
-        },
-        {
-            path: '*',
-            element: <Navigate to='/404'></Navigate>
+            element: <Layout/>,
+            children: [] as Partial<routePath>[]
         }
-    ]
+    ] as routePath[]
+    // let routeObj = {
+    //     path: '/',
+    //     element: <Layout/>,
+    //     // element: <Layout/>,
+    //     children: [] as Partial<routePath>[]
+    // }
+    asyncRoutes[0].children = [...routeList]
     const staticRouter = useRoutes(staticRoutes)
-    const dynamicRouter = useRoutes([...staticRoutes, dynamicRoute])
-    if (!token) {
+    const dynamicRouter = useRoutes([...staticRoutes, ...asyncRoutes])
+    if (!token || whiteList.includes(location.pathname)) {
+        console.log('无token')
         return staticRouter
     } else {
-        // 访问没有权限的路由，则不需要生成动态路由列表
-        if (whiteList.includes(location.pathname)) {
-            return staticRouter
-        } else {
-            return dynamicRoute.children!.length > 0 ? dynamicRouter : null
-        }
+        console.log('有token')
+        return routeList.length > 0 ? dynamicRouter : null
     }
 }
 

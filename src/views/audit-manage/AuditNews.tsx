@@ -8,6 +8,7 @@ import {News} from "@/views/news-manage/types";
 import {ColumnsType} from "antd/es/table";
 import EmptyState from "@/components/antd/EmptyState";
 import {store} from "@/redux";
+import {useAuthContext} from "@/components/Auth/hooks/useAuthContext";
 
 const AuditNews: React.FC = () => {
     const navItems = ['审核管理','审核新闻']
@@ -17,13 +18,9 @@ const AuditNews: React.FC = () => {
             payload: navItems
         })
     }, []);
-    const userStr = localStorage.getItem('user')
-    let _user: Partial<User> = {
-        username: ''
-    }
-    if (userStr) _user = JSON.parse(userStr)
+    const { user } = useAuthContext()
     const [dataSource, setDataSource] = useState<News[]>([])
-    const {roleId, region} = _user
+    const {roleId, region} = user
 
     const getAuditList = () => {
         reqGetAuditList().then(res => {

@@ -27,7 +27,7 @@ export const reqUpdateUser = (id:string, userinfo:Partial<User>) => {
     });
 }
 
-// 登陆（查询用户）
+// 登陆
 export const reqLogin = (username:string, password:string) => {
     return requests({
         method:'post',
@@ -38,3 +38,6 @@ export const reqLogin = (username:string, password:string) => {
         }
     })
 }
+
+// 查询用户（根据token）
+export const reqGetUserInfo = () => requests.get('/users')

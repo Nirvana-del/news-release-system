@@ -12,13 +12,8 @@ interface HeaderProps {
 
 const AppHeader: React.FC<HeaderProps> = (props) => {
     const { navItems } = props
-    const jsonStr = localStorage.getItem('user')
-    const {handleLogout} = useAuthContext()
+    const { handleLogout, user } = useAuthContext()
     const [modal, contextHolder] = Modal.useModal();
-    let user: Partial<User> = {
-        username: '',
-    }
-    if (jsonStr) user = JSON.parse(jsonStr)
     const config = {
         title: '您确定要退出吗？',
         okText: '确定',

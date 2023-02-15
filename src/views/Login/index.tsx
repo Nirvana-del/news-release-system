@@ -4,10 +4,9 @@ import {Button, Checkbox, Form, Input} from 'antd';
 import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import {useAuthContext} from "@/components/Auth/hooks/useAuthContext";
 import ParticlesBackground from "@/views/Login/ParticlesBackground";
-import Cookies from 'js-cookie';
+import Cookie from 'js-cookie';
 // import { enc, mode, AES, pad } from 'crypto-js';
 import { enc, AES } from 'crypto-js';
-
 
 const Login: React.FC = () => {
     const {handleLogin} = useAuthContext()
@@ -15,22 +14,22 @@ const Login: React.FC = () => {
         const { username, password, remember } = values
         handleLogin(username, password)
         if(remember){
-            Cookies.set('userName', username, {
+            Cookie.set('userName', username, {
                 expires: 5
             })
-            Cookies.set('userPwd', AES.encrypt(password,'sssg'), {
+            Cookie.set('userPwd', AES.encrypt(password,'sssg'), {
                 expires: 5 // 存储5天
             })
         }else {
             // 删除cookie
-            Cookies.remove('userName')
-            Cookies.remove('userPwd')
+            Cookie.remove('userName')
+            Cookie.remove('userPwd')
         }
     }
     const [form] = Form.useForm()
     useEffect(() => {
-        const enUsername = Cookies.get('userName') ? Cookies.get('userName') : '';
-        const enPassword = Cookies.get('userPwd') ? Cookies.get('userPwd') : '';
+        const enUsername = Cookie.get('userName') ? Cookie.get('userName') : '';
+        const enPassword = Cookie.get('userPwd') ? Cookie.get('userPwd') : '';
         if (enPassword) {
             // 对密码进行解密
             const pwd = AES.decrypt(enPassword,'sssg').toString(enc.Utf8)

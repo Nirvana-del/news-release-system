@@ -3,13 +3,14 @@ import { Table, Button, Modal, notification, ConfigProvider } from 'antd'
 import { reqGetDraftList, reqDeleteNews, reqSendNews } from '@/api/news';
 import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined, UploadOutlined } from '@ant-design/icons';
 import { NavLink, useNavigate } from 'react-router-dom';
-import {User} from "@/views/user-manage/types";
 import {Category, News} from "@/views/news-manage/types";
 import EmptyState from "@/components/antd/EmptyState";
 import {store} from "@/redux";
+import {useAuthContext} from "@/components/Auth/hooks/useAuthContext";
 const { confirm } = Modal;
 
 const NewsDraft: React.FC = () => {
+    const { user } = useAuthContext()
     const navItems = ['新闻管理','草稿箱']
     useEffect(() => {
         store.dispatch({
@@ -17,12 +18,7 @@ const NewsDraft: React.FC = () => {
             payload: navItems
         })
     }, []);
-    const userStr = localStorage.getItem('user')
-    let _user: Partial<User> = {
-        username: ''
-    }
-    if (userStr) _user = JSON.parse(userStr)
-    const { username } = _user
+    const { username } = user
     const [dataSource, setDataSource] = useState([])
     const navigate = useNavigate()
     const columns = [

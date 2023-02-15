@@ -1,6 +1,7 @@
 {
   "name": "common-management",
   "private": true,
+  "homepage": ".",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite --host --port 3002",
@@ -21,10 +22,10 @@
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-redux": "^7.2.8",
     "react-router-dom": "^6.3.0",
     "react-tsparticles": "^2.5.3",
     "redux": "^4.1.2",
+    "react-redux": "^7.2.9",
     "redux-persist": "^6.0.0",
     "reset-css": "^5.0.1",
     "tsparticles": "^2.5.3"

@@ -1,4 +1,4 @@
-import { legacy_createStore as createStore, combineReducers } from 'redux'
+import { createStore, combineReducers } from 'redux'
 import { CollapsedReducer } from './reducers/CollapsedReducer'
 import { LoadingReducer } from './reducers/LoadingReducer'
 import { BreadCrumbReducer } from './reducers/BreadCrumbReducer'

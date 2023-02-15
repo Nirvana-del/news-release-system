@@ -4,7 +4,6 @@ import React from "react";
 
 
 export interface AuthProviderValue {
-    tokenStr: string | null;
     handleLogin: (username: string, password: string) => void;
     handleLogout: () => void;
     user: Partial<User>;

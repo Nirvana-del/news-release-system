@@ -4,23 +4,17 @@ import React, {useEffect,  useState} from 'react'
 import { Row, Col, Card, List, Drawer, Avatar } from 'antd'
 import {EditOutlined, EllipsisOutlined, SettingOutlined, UserOutlined} from '@ant-design/icons';
 import { groupBy } from 'lodash'
-import {User} from "@/views/user-manage/types";
 import {News} from "@/views/news-manage/types";
 import BarChart from "@/views/Home/BarChart";
 import PieChart from "@/views/Home/PieChart";
 import { store } from '@/redux'
+import {useAuthContext} from "@/components/Auth/hooks/useAuthContext";
 const logo = new URL(`@/assets/images/logo.jpg`,import.meta.url).href;
+// const logo = `../../assets/images/logo.jpg`
 const { Meta } = Card;
 const Home: React.FC = () => {
-    const jsonStr = localStorage.getItem('user')
-    // console.log(jsonStr)
-    let _user: Partial<User> = {
-        id: '',
-        username: '',
-        role: { pathList: [] }
-    }
-    if (jsonStr) _user = JSON.parse(jsonStr)
-    const { username, region, role } = _user
+    const { user } = useAuthContext()
+    const { username, region, role } = user
     const { roleName } = role || {}
 
     const [mostBrowsingNews, setMostBrowsingNews] = useState<News[]>([])
@@ -43,6 +37,8 @@ const Home: React.FC = () => {
         reqGetMostBrowsingNews().then(res => {
             // console.log('最常浏览',res.data);
             setMostBrowsingNews(res.data.newsList)
+        }).catch(res => {
+            console.log(res)
         })
     }, [])
     // 最多点赞新闻
@@ -55,11 +51,11 @@ const Home: React.FC = () => {
     // 所有已发布的新闻
     useEffect(() => {
         reqGetAllPublishedNews().then(res => {
-            // console.log('所有已发布',res.data);
+            console.log('所有已发布',res.data.publishedList);
             const reqList = res.data.publishedList
             setPublishedList(reqList)
             const groupObj = groupBy(reqList, (item: News) => item.category?.label)
-            // console.log('groupObj',groupObj);
+            console.log('groupObj',groupObj);
             setBarData(groupObj)
         })
     }, [])
@@ -72,7 +68,7 @@ const Home: React.FC = () => {
         setPieData(groupObj)
     }
     return (
-        <div id="can" style={{height:'630px'}}>
+        <div id="can" style={{height:'530px'}}>
             <Row gutter={16}>
                 <Col span={8}>
                     <Card title="用户最常浏览" bordered hoverable>

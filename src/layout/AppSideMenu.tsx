@@ -13,8 +13,6 @@ import {
 import {useLocation, useNavigate} from "react-router-dom";
 import {useAuthContext} from "@/components/Auth/hooks/useAuthContext";
 import {Permission} from "@/views/permission-manage/types/permission";
-import {User} from "@/views/user-manage/types";
-import {Role} from "@/views/permission-manage/types/role";
 import {connect} from 'react-redux'
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -44,13 +42,6 @@ interface SideMenuProps {
 
 const AppSideMenu: React.FC<SideMenuProps> = (props) => {
     const {collapsed, changeCollapsed} = props
-    const jsonStr = localStorage.getItem('user')
-    let _user: Partial<User> = {
-        id: '',
-        username: '',
-        role: {pathList: []}
-    }
-    if (jsonStr) _user = JSON.parse(jsonStr)
     const {rightTree} = useAuthContext()
     // const [openKeys, setOpenKeys] = useState([] as string[]);
     const [menu, setMenu] = useState<MenuItem[]>([]);
@@ -65,15 +56,14 @@ const AppSideMenu: React.FC<SideMenuProps> = (props) => {
     //     setOpenKeys([keys.at(-1)!])
     // };
     //将权限树处理成侧边栏菜单格式的数据
-    const generateMenu = (menuList: Permission[], role: Partial<Role>): MenuItem[] => {
+    const generateMenu = (menuList: Permission[]): MenuItem[] => {
         return menuList.map((item) => {
             const {label, path, children, pagePermission} = item
-            const rights = role.pathList || []
-            if (pagePermission !== 1 || !rights.includes(path)) {
+            if (pagePermission !== 1) {
                 return null
             }
             if (children && children.length) {
-                return getItem(label, path, iconMap[path], generateMenu(children, role))
+                return getItem(label, path, iconMap[path], generateMenu(children))
             } else {
                 return getItem(label, path, iconMap[path])
             }
@@ -81,7 +71,7 @@ const AppSideMenu: React.FC<SideMenuProps> = (props) => {
     }
 
     useEffect(() => {
-        setMenu(generateMenu(rightTree, _user.role!))
+        setMenu(generateMenu(rightTree))
     }, [rightTree])
     return (
         <Sider id="side-menu" collapsible collapsed={collapsed} onCollapse={(value) => changeCollapsed(value)}>

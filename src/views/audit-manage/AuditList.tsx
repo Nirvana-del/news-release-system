@@ -7,6 +7,7 @@ import {ColumnsType} from "antd/es/table";
 import {News} from "@/views/news-manage/types";
 import EmptyState from "@/components/antd/EmptyState";
 import {store} from "@/redux";
+import {useAuthContext} from "@/components/Auth/hooks/useAuthContext";
 
 const AuditList: React.FC = () => {
     const navItems = ['审核管理','审核列表']
@@ -16,17 +17,15 @@ const AuditList: React.FC = () => {
             payload: navItems
         })
     }, []);
-    const userStr = localStorage.getItem('user')
-    let _user: Partial<User> = {
-        username: ''
-    }
-    if (userStr) _user = JSON.parse(userStr)
-    const { username } = _user
+    const { user } = useAuthContext()
+    const { username } = user
     const navigate = useNavigate()
     const getAuditList = () => {
         reqGetUserAuditList(username!).then(res => {
             console.log(res.data);
             setDataSource(res.data.auditList)
+        }).catch(res => {
+            console.log(res)
         })
     }
     const [dataSource, setDataSource] = useState([])

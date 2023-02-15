@@ -14,7 +14,6 @@ const NewsPreview: React.FC = () => {
         '2': '#67C23A',
         '3': '#F56C6C'
     }
-    console.log(params);
     useEffect(() => {
         reqGetNewsDetail(params.id!).then(res => {
             console.log(res.data);
