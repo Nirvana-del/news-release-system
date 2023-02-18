@@ -2,7 +2,7 @@ import axios from 'axios'
 import { store } from '@/redux'
 import Cookie from "js-cookie";
 const request  = axios.create({
-    baseURL:'http://localhost:8082',
+    baseURL:'http://47.92.160.213:8087',
     timeout:5000,
     headers: { 'Content-Type': 'multipart/form-data' }
 })

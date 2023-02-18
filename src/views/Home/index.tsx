@@ -1,21 +1,22 @@
-import { reqGetMostBrowsingNews, reqGetMostLikesNews, reqGetAllPublishedNews } from '@/api/news'
-import { NavLink } from 'react-router-dom';
-import React, {useEffect,  useState} from 'react'
-import { Row, Col, Card, List, Drawer, Avatar } from 'antd'
+import {reqGetMostBrowsingNews, reqGetMostLikesNews, reqGetAllPublishedNews} from '@/api/news'
+import {NavLink} from 'react-router-dom';
+import React, {useEffect, useState} from 'react'
+import {Row, Col, Card, List, Drawer, Avatar} from 'antd'
 import {EditOutlined, EllipsisOutlined, SettingOutlined, UserOutlined} from '@ant-design/icons';
-import { groupBy } from 'lodash'
+import {groupBy} from 'lodash'
 import {News} from "@/views/news-manage/types";
 import BarChart from "@/views/Home/BarChart";
 import PieChart from "@/views/Home/PieChart";
-import { store } from '@/redux'
+import {store} from '@/redux'
 import {useAuthContext} from "@/components/Auth/hooks/useAuthContext";
-const logo = new URL(`@/assets/images/logo.jpg`,import.meta.url).href;
+
+const logo = new URL(`@/assets/images/cat.svg`, import.meta.url).href;
 // const logo = `../../assets/images/logo.jpg`
-const { Meta } = Card;
+const {Meta} = Card;
 const Home: React.FC = () => {
-    const { user } = useAuthContext()
-    const { username, region, role } = user
-    const { roleName } = role || {}
+    const {user} = useAuthContext()
+    const {username, region, role} = user
+    const {roleName} = role || {}
 
     const [mostBrowsingNews, setMostBrowsingNews] = useState<News[]>([])
     const [mostLikesNews, setMostLikesNews] = useState<News[]>([])
@@ -51,11 +52,11 @@ const Home: React.FC = () => {
     // 所有已发布的新闻
     useEffect(() => {
         reqGetAllPublishedNews().then(res => {
-            console.log('所有已发布',res.data.publishedList);
+            console.log('所有已发布', res.data.publishedList);
             const reqList = res.data.publishedList
             setPublishedList(reqList)
             const groupObj = groupBy(reqList, (item: News) => item.category?.label)
-            console.log('groupObj',groupObj);
+            console.log('groupObj', groupObj);
             setBarData(groupObj)
         })
     }, [])
@@ -68,10 +69,16 @@ const Home: React.FC = () => {
         setPieData(groupObj)
     }
     return (
-        <div id="can" style={{height:'530px'}}>
-            <Row gutter={16}>
+        <div id="can" style={{height: '500px'}}>
+            <Row gutter={16} style={{
+                marginBottom: '20px'
+            }}>
                 <Col span={8}>
-                    <Card title="用户最常浏览" bordered hoverable>
+                    <Card title="用户最常浏览" bordered
+                          style={{
+                              height: '320px'
+                          }}
+                          hoverable>
                         <List
                             dataSource={mostBrowsingNews}
                             renderItem={(item) => (
@@ -83,7 +90,11 @@ const Home: React.FC = () => {
                     </Card>
                 </Col>
                 <Col span={8}>
-                    <Card title="用户点赞最多" hoverable>
+                    <Card title="用户点赞最多"
+                          style={{
+                              height: '320px'
+                          }}
+                          hoverable>
                         <List
                             dataSource={mostLikesNews}
                             renderItem={(item) => (
@@ -98,21 +109,21 @@ const Home: React.FC = () => {
                     <Card
                         bordered
                         hoverable
-                        cover={<img alt="example" style={{ height: '244px' }} src={logo} />}
+                        style={{
+                            height: '320px'
+                        }}
+                        cover={<img height={170}  alt="example" src={logo}/>}
                         actions={[
-                            <SettingOutlined key="setting" onClick={() => handleOpen()} />,
-                            <EditOutlined key="edit" />,
-                            <EllipsisOutlined key="ellipsis" />,
+                            <UserOutlined key="setting" onClick={() => handleOpen()}/>
                         ]}
                     >
-                        <Meta title={username}
-                              avatar={<Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />}
+                        <Meta title={<div>用户名：{username}</div>}
                               description={
                                   <div>
                                       <b>{region ? region : '全球'}</b>
-                                      <span style={{ paddingLeft: '30px' }}>{roleName}</span>
+                                      <span style={{paddingLeft: '30px'}}>{roleName}</span>
                                   </div>
-                              } />
+                              }/>
                     </Card>
                 </Col>
             </Row>
@@ -128,7 +139,7 @@ const Home: React.FC = () => {
                 onClose={() => setOpen(false)}
                 open={open}
                 closable>
-               <PieChart renderData={pieData}></PieChart>
+                <PieChart renderData={pieData}></PieChart>
             </Drawer>
         </div>
     )

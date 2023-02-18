@@ -125,19 +125,19 @@ const AuthProvider: React.FC<Props> = (props) => {
         getPermissionTree()
     }
     const handleLogin = useCallback((username: string, password: string) => {
-        const in6Hours = 1 / 2
+        const in5Minutes = 1 / 48 / 6
         reqLogin(username, password).then((res: any) => {
             const {code, data: {token}} = res
             if (code === 200) {
                 // 将 token 存入 cookie
-                set_Token(token,in6Hours)
+                set_Token(token,in5Minutes)
                 initData()
                 // 通过 token 获取当前用户信息并将其全局数据共享
                 reqGetUserInfo().then((res: any) => {
                     const userInfo = res.data.userInfo
                     setUser(userInfo)
                     // 将用户信息到 cookie 中
-                    set_UserInfo(userInfo, in6Hours)
+                    set_UserInfo(userInfo, in5Minutes)
                     navigate('/home')
                 })
             } else {

@@ -4,6 +4,7 @@ import {reqGetNewsDetail} from '@/api/news'
 import {useParams} from 'react-router-dom';
 import moment from 'moment'
 import {News} from "@/views/news-manage/types";
+import {LeftOutlined} from "@ant-design/icons";
 
 const NewsPreview: React.FC = () => {
     const params = useParams()
@@ -26,7 +27,12 @@ const NewsPreview: React.FC = () => {
     return (
         <div>
             {
-                newsInfo && <div>
+                newsInfo &&
+                <>
+                    <LeftOutlined style={{
+                        marginBottom: '20px',
+                        cursor: 'pointer'
+                    }} onClick={() => window.history.back()}/>
                     <Descriptions size="small" column={3}>
                         <Descriptions.Item label="创建者">{newsInfo.author}</Descriptions.Item>
                         <Descriptions.Item
@@ -53,7 +59,7 @@ const NewsPreview: React.FC = () => {
                         border: '1px solid #E6E8EB'
                     }}>
                     </div>
-                </div>
+                </>
             }
         </div>
     )
