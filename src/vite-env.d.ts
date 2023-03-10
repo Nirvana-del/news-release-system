@@ -1,1 +1,9 @@
-/// <reference types="vite/client" />
+declare module 'nprogress'
+declare module 'lodash'
+declare module 'tsparticles'
+declare module 'draftjs-to-html'
+declare module 'html-to-draftjs'
+declare module 'draft-js'
+declare module 'react-draft-wysiwyg'
+declare module 'js-cookie'
+declare module 'crypto-js'
