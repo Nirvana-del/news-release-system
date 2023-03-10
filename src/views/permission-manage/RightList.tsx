@@ -67,7 +67,7 @@ const RightList: React.FC = () => {
                                     onChange={() => switchRights(item)}></Switch>
                         </div>} title="页面配置项" trigger={item.pagePermission === undefined ? '' : 'click'}>
                             <Button type="primary" icon={<EditOutlined/>}
-                                    disabled={item.grade === 2}
+                                    disabled={item.grade === 2 || item.path === '/home'}
                             >修改</Button>
                         </Popover>
                     </div>

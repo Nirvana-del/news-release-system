@@ -1,16 +1,15 @@
-import { useEffect, useState } from 'react'
-import { reqGetNewsListByPublishState, reqUpdateNews, reqDeleteNews, reqGetOfflineNewsList } from '@/api/news';
-import { notification } from 'antd'
+import {useEffect, useState} from 'react'
+import {reqGetNewsListByPublishState, reqUpdateNews, reqDeleteNews, reqGetOfflineNewsList} from '@/api/news';
+import {notification} from 'antd'
 import {User} from "@/views/user-manage/types";
 import {News} from "@/views/news-manage/types";
+import {useAuthContext} from "@/components/Auth/hooks/useAuthContext";
 
-const usePublish = (publishState:number) => {
-    const userStr = localStorage.getItem('user')
-    let _user: Partial<User> = {
-        username: ''
-    }
-    if (userStr) _user = JSON.parse(userStr)
-    const { username, roleId, region } = _user
+const usePublish = (publishState: number) => {
+    const {user} = useAuthContext()
+    console.log(user)
+    const {username, region, role} = user
+    const {id: roleId} = role!
     const [dataSource, setDataSource] = useState<News[]>([])
     const getNewsListByPublishState = () => {
         // 获取已下线的新闻
@@ -42,8 +41,7 @@ const usePublish = (publishState:number) => {
                 }
 
             })
-        }
-        else reqGetNewsListByPublishState(publishState, username!).then(res => {
+        } else reqGetNewsListByPublishState(publishState, username!).then(res => {
             // console.log('根据状态获取新闻列表',res.data);
             setDataSource(res.data.newsList)
         })
@@ -54,13 +52,13 @@ const usePublish = (publishState:number) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const handlePublish = (id:string) => {
+    const handlePublish = (id: string) => {
         console.log(id);
         reqUpdateNews(id, {
             publishState: 2,
             publishTime: Date.now()
-        }).then((res:any) => {
-            if (res.code === 200){
+        }).then((res: any) => {
+            if (res.code === 200) {
                 notification.info({
                     message: `通知`,
                     description:
@@ -73,12 +71,12 @@ const usePublish = (publishState:number) => {
         })
 
     }
-    const handleSunset = (id:string) => {
+    const handleSunset = (id: string) => {
         console.log(id);
         reqUpdateNews(id, {
             publishState: 3
-        }).then((res:any) => {
-            if (res.code === 200){
+        }).then((res: any) => {
+            if (res.code === 200) {
                 notification.info({
                     message: `通知`,
                     description:
@@ -90,10 +88,10 @@ const usePublish = (publishState:number) => {
 
         })
     }
-    const handleDelete = (id:string) => {
+    const handleDelete = (id: string) => {
         console.log(id);
-        reqDeleteNews(id).then((res:any) => {
-            if (res.code === 200){
+        reqDeleteNews(id).then((res: any) => {
+            if (res.code === 200) {
                 notification.info({
                     message: `通知`,
                     description:

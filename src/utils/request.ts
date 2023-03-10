@@ -3,6 +3,8 @@ import { store } from '@/redux'
 import Cookie from "js-cookie";
 const request  = axios.create({
     baseURL:'http://47.92.160.213:8087',
+    // baseURL:'http://127.0.0.1:8087',
+    // baseURL:'/api',
     timeout:5000,
     headers: { 'Content-Type': 'multipart/form-data' }
 })

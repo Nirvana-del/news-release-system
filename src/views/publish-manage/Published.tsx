@@ -3,6 +3,7 @@ import NewsPublish from "@/components/publish-manage/NewsPublish";
 import usePublish from "@/components/publish-manage/hooks/usePublish";
 import {Button} from "antd";
 import {store} from "@/redux";
+import {useAuthContext} from "@/components/Auth/hooks/useAuthContext";
 
 const Published: React.FC = () => {
     const navItems = ['发布管理','已发布']
